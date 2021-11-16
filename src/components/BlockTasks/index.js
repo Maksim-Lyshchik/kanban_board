@@ -47,6 +47,8 @@ export const BlockTasks = () => {
       <StyledTask>Task task task task task task task task task task task task 1</StyledTask>
       <StyledTask>Task 2</StyledTask>
       <StyledTask>Task 3</StyledTask>
+      <StyledTask>Task 4</StyledTask>
+      <StyledTask>Task 5</StyledTask>
       <StyledAddButton>
         <Icon type='plus' />
         <span>Add card</span>
