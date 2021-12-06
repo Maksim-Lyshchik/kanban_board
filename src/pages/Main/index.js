@@ -4,8 +4,11 @@ import styled from 'styled-components';
 
 const StyledMain = styled.div`
   display: flex;
-  min-height: 100%;
+  justify-content: space-between;
   
+  box-sizing: border-box;
+  
+  height: calc(100vh - 110px);
   padding: 20px;
   
   background-color: #0079BF;
@@ -14,6 +17,9 @@ const StyledMain = styled.div`
 export const Main = () => {
   return (
     <StyledMain>
+      <BlockTasks/>
+      <BlockTasks/>
+      <BlockTasks/>
       <BlockTasks/>
     </StyledMain>
   );
