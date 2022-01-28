@@ -18,6 +18,10 @@ const StyledFooter = styled.div`
 
   color: #FFFFFF;
   background-color: #0067A3;
+
+  @media only screen and (max-width: 600px) {
+    display: none;
+  }
 `;
 
 const StyledInformBlock = styled.div`

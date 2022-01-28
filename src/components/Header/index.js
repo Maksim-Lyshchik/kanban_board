@@ -17,6 +17,10 @@ const StyledHeader = styled.div`
 
   color: #FFFFFF;
   background-color: #0067A3;
+
+  @media only screen and (max-width: 600px) {
+    justify-content: flex-end;
+  }
 `;
 
 const StyledHeaderName = styled.p`
@@ -24,6 +28,10 @@ const StyledHeaderName = styled.p`
   line-height: 33px;
   
   margin: 0;
+
+  @media only screen and (max-width: 600px) {
+    display: none;
+  }
 `;
 
 export const Header = () => {

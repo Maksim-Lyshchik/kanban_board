@@ -21,6 +21,11 @@ const StyledBlockTasks = styled.div`
   &:last-child {
     margin-right: 0;
   }
+
+  @media only screen and (max-width: 600px) {
+    margin-right: 0;
+    margin-bottom: 50px;
+  }
 `;
 
 const StyledNameBlockTask = styled.p`
