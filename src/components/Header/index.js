@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Avatar } from '../Avatar';
 
 const StyledHeader = styled.div`
   display: flex;
@@ -38,7 +39,7 @@ export const Header = () => {
   return (
     <StyledHeader>
       <StyledHeaderName>Awesome Kanban Board</StyledHeaderName>
-      <div>AVATAR</div>
+      <Avatar />
     </StyledHeader>
   );
 };
