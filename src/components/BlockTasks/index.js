@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { Icon } from '../Icon';
+import { useDispatch } from 'react-redux';
+import { addTask } from '../../action/task';
 
 const StyledBlockTasks = styled.div`
   display: flex;
@@ -75,6 +77,12 @@ const StyledAddButton = styled.div`
 `;
 
 export const BlockTasks = () => {
+  const dispatch = useDispatch();
+
+  const handleClick = useCallback(() => {
+    dispatch(addTask({id: 1, title: 'REDUX TASK'}))
+  }, [dispatch])
+
   return (
     <StyledBlockTasks>
       <StyledNameBlockTask>Backlog</StyledNameBlockTask>
@@ -92,7 +100,7 @@ export const BlockTasks = () => {
         <StyledTask>Task 5</StyledTask>
         <StyledTask>Task 5</StyledTask>
       </StyledTasks>
-      <StyledAddButton>
+      <StyledAddButton onClick={handleClick}>
         <Icon type='plus' />
         <span>Add card</span>
       </StyledAddButton>
