@@ -1,6 +1,7 @@
 import React from 'react';
 import { BlockTasks } from '../../components/BlockTasks';
 import styled from 'styled-components';
+import { blocksMock } from './blocksMock';
 
 const StyledMain = styled.div`
   display: flex;
@@ -29,10 +30,7 @@ const StyledMain = styled.div`
 export const Main = () => {
   return (
     <StyledMain>
-      <BlockTasks/>
-      <BlockTasks/>
-      <BlockTasks/>
-      <BlockTasks/>
+      {blocksMock.map(block => <BlockTasks {...block}/>)}
     </StyledMain>
   );
 };

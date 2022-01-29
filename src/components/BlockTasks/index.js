@@ -45,6 +45,7 @@ const StyledTasks = styled.div`
   flex-direction: column;
   
   box-sizing: border-box;
+  width: 100%;
   
   overflow: scroll;
 
@@ -76,7 +77,7 @@ const StyledAddButton = styled.div`
   align-items: center;
 `;
 
-export const BlockTasks = () => {
+export const BlockTasks = ({ blockName, tasks}) => {
   const dispatch = useDispatch();
 
   const handleClick = useCallback(() => {
@@ -85,20 +86,9 @@ export const BlockTasks = () => {
 
   return (
     <StyledBlockTasks>
-      <StyledNameBlockTask>Backlog</StyledNameBlockTask>
+      <StyledNameBlockTask>{blockName}</StyledNameBlockTask>
       <StyledTasks>
-        <StyledTask>Task task task task task task task task task task task task task task task task task task 1</StyledTask>
-        <StyledTask>Task 2</StyledTask>
-        <StyledTask>Task 3</StyledTask>
-        <StyledTask>Task 4</StyledTask>
-        <StyledTask>Task 5</StyledTask>
-        <StyledTask>Task 5</StyledTask>
-        <StyledTask>Task 5</StyledTask>
-        <StyledTask>Task 5</StyledTask>
-        <StyledTask>Task 5</StyledTask>
-        <StyledTask>Task 5</StyledTask>
-        <StyledTask>Task 5</StyledTask>
-        <StyledTask>Task 5</StyledTask>
+        {tasks.map(({id, title }) => <StyledTask key={id}>{title}</StyledTask>)}
       </StyledTasks>
       <StyledAddButton onClick={handleClick}>
         <Icon type='plus' />
