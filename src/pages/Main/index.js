@@ -14,7 +14,7 @@ const StyledMain = styled.div`
   
   background-color: #0079BF;
   
-  @media only screen and (max-width: 600px) {  
+  @media only screen and (max-width: 1236px) {  
     flex-direction: column;
     align-items: center;
     
@@ -22,7 +22,7 @@ const StyledMain = styled.div`
     
     height: calc(100vh - 55px);
   }
-  @media only screen and (min-width: 600px) {
+  @media only screen and (min-width:1236px) {
 
   }
 `;
