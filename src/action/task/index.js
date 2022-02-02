@@ -1,2 +1,2 @@
-export { addTask } from './addTask.js';
+export { addTaskBacklog } from './addTaskBacklog.js';
 export { removeTask } from './removeTask';
