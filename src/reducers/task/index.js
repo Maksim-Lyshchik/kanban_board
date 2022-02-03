@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { addTaskBacklog, removeTask } from '../../action/task';
+import { addTaskBacklog, removeTaskBacklog } from '../../action/task';
 
 export const tasks = createReducer({}, builder => {
   builder.addCase(addTaskBacklog, (state, { payload }) => {
@@ -8,7 +8,7 @@ export const tasks = createReducer({}, builder => {
       [payload.id]: { ...payload },
     };
   });
-  builder.addCase(removeTask, (state, { payload }) => {
+  builder.addCase(removeTaskBacklog, (state, { payload }) => {
     const { [payload]: closedTask, ...tasks } = state;
     return tasks;
   });
