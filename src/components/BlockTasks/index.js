@@ -7,6 +7,8 @@ import { Input } from '../Input';
 import { getUnicId } from '../../helpers/getUnicId';
 import { Button } from '../Button';
 import { TypesButton } from '../../constants/TypesButton';
+import { Select } from '../Select';
+import { TypesBlocks } from '../../constants/TypesBlocks';
 
 const StyledBlockTasks = styled.div`
   display: flex;
@@ -98,22 +100,27 @@ const StyledNameButton = styled.span`
   padding-left: 4px;
 `;
 
-export const BlockTasks = ({ blockName, tasks }) => {
+export const BlockTasks = ({
+  blockName,
+  tasks,
+  selectTasks,
+  isCreateNewTasks= false,
+}) => {
   const dispatch = useDispatch();
-  const [isShowInput, setIsShowInput] = useState(false);
-  const isSubmit = isShowInput;
+  const [isShow, setIsShow] = useState(false);
+  const isSubmit = isShow;
   const [value, setValue] = useState('');
   const id = getUnicId([]);
 
   const handleClickAdd = useCallback(() => {
-    setIsShowInput(!isShowInput);
-  }, [isShowInput]);
+    setIsShow(!isShow);
+  }, [isShow]);
 
   const handleClickSubmit = useCallback(() => {
-    dispatch(addTaskBacklog({ id, title: value }));
+    dispatch(addTaskBacklog({ id, title: value, status: TypesBlocks.BACKLOG }));
 
-    setIsShowInput(!isShowInput);
-  }, [dispatch, id, isShowInput, value]);
+    setIsShow(!isShow);
+  }, [dispatch, id, isShow, value]);
 
   const handleChange = useCallback(({ target }) => {
     const { value } = target;
@@ -126,7 +133,11 @@ export const BlockTasks = ({ blockName, tasks }) => {
       <StyledTasks>
         {tasks.map(({ id, title }) => <StyledTask key={id}>{title}</StyledTask>)}
       </StyledTasks>
-      {isShowInput && <Input onChange={handleChange} value={value} />}
+      {isShow && (
+        isCreateNewTasks ? (
+        <Input onChange={handleChange} value={value} />
+        ) : <Select options={selectTasks} />
+      )}
       {!isSubmit && <Button onClick={handleClickAdd} color={TypesButton.OUTLINE}>
         <Icon type="plus" fill="#5E6C84" />
         <StyledNameButton>Add card</StyledNameButton>
