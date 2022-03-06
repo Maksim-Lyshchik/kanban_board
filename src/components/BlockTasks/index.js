@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '../Icon';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addTaskBacklog } from '../../action/task';
 import { Input } from '../Input';
 import { getUnicId } from '../../helpers/getUnicId';
@@ -9,6 +9,8 @@ import { Button } from '../Button';
 import { TypesButton } from '../../constants/TypesButton';
 import { Select } from '../Select';
 import { TypesBlocks } from '../../constants/TypesBlocks';
+import { selectIdsTasks } from '../../selectors/tasks';
+import { changeStatusTask } from '../../action/task/changeStatusTask';
 
 const StyledBlockTasks = styled.div`
   display: flex;
@@ -110,22 +112,38 @@ export const BlockTasks = ({
   const [isShow, setIsShow] = useState(false);
   const isSubmit = isShow;
   const [value, setValue] = useState('');
-  const id = getUnicId([]);
+  const [id, setId] = useState('');
+  const idsTasks = useSelector(selectIdsTasks);
+  const newId = getUnicId(idsTasks);
 
   const handleClickAdd = useCallback(() => {
     setIsShow(!isShow);
   }, [isShow]);
 
   const handleClickSubmit = useCallback(() => {
-    dispatch(addTaskBacklog({ id, title: value, status: TypesBlocks.BACKLOG }));
+    if (blockName === TypesBlocks.BACKLOG) {
+      if (!value) {
+        return;
+      }
 
+      dispatch(addTaskBacklog({ id: newId, title: value, status: blockName }));
+    } else if ([TypesBlocks.READY, TypesBlocks.IN_PROGRESS, TypesBlocks.FINISHED].includes(blockName)) {
+      dispatch(changeStatusTask({ id, status: blockName }))
+    }
+
+    setValue('');
     setIsShow(!isShow);
-  }, [dispatch, id, isShow, value]);
+  }, [blockName, dispatch, id, isShow, newId, value]);
 
-  const handleChange = useCallback(({ target }) => {
+  const handleChangeInput = useCallback(({ target }) => {
     const { value } = target;
     setValue(value)
-  }, [])
+  }, []);
+
+  const handleChangeSelect = useCallback(({ target }) => {
+    const { value } = target;
+    setId(value)
+  }, []);
 
   return (
     <StyledBlockTasks>
@@ -135,8 +153,8 @@ export const BlockTasks = ({
       </StyledTasks>
       {isShow && (
         isCreateNewTasks ? (
-        <Input onChange={handleChange} value={value} />
-        ) : <Select options={selectTasks} />
+        <Input onChange={handleChangeInput} value={value} />
+        ) : <Select onChange={handleChangeSelect} options={selectTasks} />
       )}
       {!isSubmit && <Button onClick={handleClickAdd} color={TypesButton.OUTLINE}>
         <Icon type="plus" fill="#5E6C84" />

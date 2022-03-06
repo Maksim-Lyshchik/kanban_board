@@ -22,3 +22,8 @@ export const selectFinishedTask = createSelector(
   selectTasks,
   tasks => tasks.filter(({ status }) => status === TypesBlocks.FINISHED),
 );
+
+export const selectIdsTasks = createSelector(
+  selectTasks,
+  tasks => tasks.map(({ id }) => id),
+);

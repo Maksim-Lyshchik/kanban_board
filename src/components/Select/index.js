@@ -39,11 +39,11 @@ const StyledOption = styled.option`
   cursor: pointer;
 `;
 
-export const Select = ({ options }) => {
+export const Select = ({ options, onChange }) => {
   const hasOptions = options?.length;
 
   return (
-    <StyledSelect>
+    <StyledSelect onChange={onChange}>
       {hasOptions ? options.map(({ id, title }) => <StyledOption key={id} value={id}>{title}</StyledOption>) : (
         <StyledOption value="">Task list is empty</StyledOption>
       )}
