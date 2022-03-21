@@ -1,6 +1,7 @@
 import React from 'react';
 import { BlockTasks } from '../../components/BlockTasks';
 import styled from 'styled-components';
+import { useTasks } from '../../hooks/useTasks';
 
 const StyledMain = styled.div`
   display: flex;
@@ -13,7 +14,7 @@ const StyledMain = styled.div`
   
   background-color: #0079BF;
   
-  @media only screen and (max-width: 600px) {  
+  @media only screen and (max-width: 1236px) {  
     flex-direction: column;
     align-items: center;
     
@@ -21,18 +22,17 @@ const StyledMain = styled.div`
     
     height: calc(100vh - 55px);
   }
-  @media only screen and (min-width: 600px) {
+  @media only screen and (min-width:1236px) {
 
   }
 `;
 
 export const Main = () => {
+  const tasks = useTasks();
+
   return (
     <StyledMain>
-      <BlockTasks/>
-      <BlockTasks/>
-      <BlockTasks/>
-      <BlockTasks/>
+      {tasks.map(block => <BlockTasks {...block}/>)}
     </StyledMain>
   );
 };
