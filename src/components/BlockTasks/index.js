@@ -81,23 +81,6 @@ const StyledTask = styled.div`
   background-color: #FFFFFF;
 `;
 
-const StyledAddButton = styled.button`
-  display: flex;
-  align-items: center;
-  padding: 4px 6px;
-  border-radius: 5px;
-  cursor: pointer;
-
-  box-sizing: border-box;
-  border: none;
-
-  font-size: 18px;
-
-  &:hover {
-    background-color: #FFFFFF;
-  }
-`;
-
 const StyledNameButton = styled.span`
   padding-left: 4px;
 `;
@@ -128,12 +111,20 @@ export const BlockTasks = ({
 
       dispatch(addTaskBacklog({ id: newId, title: value, status: blockName }));
     } else if ([TypesBlocks.READY, TypesBlocks.IN_PROGRESS, TypesBlocks.FINISHED].includes(blockName)) {
+      if (!id) {
+        const defaultId = selectTasks[0].id;
+
+        dispatch(changeStatusTask({ id: defaultId, status: blockName }))
+        setId('');
+        return setIsShow(!isShow);
+      }
       dispatch(changeStatusTask({ id, status: blockName }))
+      setId('');
     }
 
     setValue('');
     setIsShow(!isShow);
-  }, [blockName, dispatch, id, isShow, newId, value]);
+  }, [blockName, dispatch, id, isShow, newId, selectTasks, value]);
 
   const handleChangeInput = useCallback(({ target }) => {
     const { value } = target;
@@ -142,7 +133,9 @@ export const BlockTasks = ({
 
   const handleChangeSelect = useCallback(({ target }) => {
     const { value } = target;
-    setId(value)
+    if (value) {
+      setId(value)
+    }
   }, []);
 
   return (
