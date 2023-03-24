@@ -1,12 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '../Icon';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addTaskBacklog } from '../../action/task';
 import { Input } from '../Input';
 import { getUnicId } from '../../helpers/getUnicId';
 import { Button } from '../Button';
 import { TypesButton } from '../../constants/TypesButton';
+import { Select } from '../Select';
+import { TypesBlocks } from '../../constants/TypesBlocks';
+import { selectIdsTasks } from '../../selectors/tasks';
+import { changeStatusTask } from '../../action/task/changeStatusTask';
 
 const StyledBlockTasks = styled.div`
   display: flex;
@@ -77,48 +81,62 @@ const StyledTask = styled.div`
   background-color: #FFFFFF;
 `;
 
-const StyledAddButton = styled.button`
-  display: flex;
-  align-items: center;
-  padding: 4px 6px;
-  border-radius: 5px;
-  cursor: pointer;
-
-  box-sizing: border-box;
-  border: none;
-
-  font-size: 18px;
-
-  &:hover {
-    background-color: #FFFFFF;
-  }
-`;
-
 const StyledNameButton = styled.span`
   padding-left: 4px;
 `;
 
-export const BlockTasks = ({ blockName, tasks }) => {
+export const BlockTasks = ({
+  blockName,
+  tasks,
+  selectTasks,
+  isCreateNewTasks= false,
+}) => {
   const dispatch = useDispatch();
-  const [isShowInput, setIsShowInput] = useState(false);
-  const isSubmit = isShowInput;
+  const [isShow, setIsShow] = useState(false);
+  const isSubmit = isShow;
   const [value, setValue] = useState('');
-  const id = getUnicId([]);
+  const [id, setId] = useState('');
+  const idsTasks = useSelector(selectIdsTasks);
+  const newId = getUnicId(idsTasks);
 
   const handleClickAdd = useCallback(() => {
-    setIsShowInput(!isShowInput);
-  }, [isShowInput]);
+    setIsShow(!isShow);
+  }, [isShow]);
 
   const handleClickSubmit = useCallback(() => {
-    dispatch(addTaskBacklog({ id, title: value }));
+    if (blockName === TypesBlocks.BACKLOG) {
+      if (!value) {
+        return;
+      }
 
-    setIsShowInput(!isShowInput);
-  }, [dispatch, id, isShowInput, value]);
+      dispatch(addTaskBacklog({ id: newId, title: value, status: blockName }));
+    } else if ([TypesBlocks.READY, TypesBlocks.IN_PROGRESS, TypesBlocks.FINISHED].includes(blockName)) {
+      if (!id) {
+        const defaultId = selectTasks[0].id;
 
-  const handleChange = useCallback(({ target }) => {
+        dispatch(changeStatusTask({ id: defaultId, status: blockName }))
+        setId('');
+        return setIsShow(!isShow);
+      }
+      dispatch(changeStatusTask({ id, status: blockName }))
+      setId('');
+    }
+
+    setValue('');
+    setIsShow(!isShow);
+  }, [blockName, dispatch, id, isShow, newId, selectTasks, value]);
+
+  const handleChangeInput = useCallback(({ target }) => {
     const { value } = target;
     setValue(value)
-  }, [])
+  }, []);
+
+  const handleChangeSelect = useCallback(({ target }) => {
+    const { value } = target;
+    if (value) {
+      setId(value)
+    }
+  }, []);
 
   return (
     <StyledBlockTasks>
@@ -126,7 +144,11 @@ export const BlockTasks = ({ blockName, tasks }) => {
       <StyledTasks>
         {tasks.map(({ id, title }) => <StyledTask key={id}>{title}</StyledTask>)}
       </StyledTasks>
-      {isShowInput && <Input onChange={handleChange} value={value} />}
+      {isShow && (
+        isCreateNewTasks ? (
+        <Input onChange={handleChangeInput} value={value} />
+        ) : <Select onChange={handleChangeSelect} options={selectTasks} />
+      )}
       {!isSubmit && <Button onClick={handleClickAdd} color={TypesButton.OUTLINE}>
         <Icon type="plus" fill="#5E6C84" />
         <StyledNameButton>Add card</StyledNameButton>
