@@ -1,2 +1,2 @@
-export const ADD_TASK = 'ADD_TASK';
-export const REMOVE_TASK = 'REMOVE_TASK';
+export const ADD_TASK_BACKLOG = 'ADD_TASK_BACKLOG';
+export const REMOVE_TASK_BACKLOG = 'REMOVE_TASK_BACKLOG';

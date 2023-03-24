@@ -2,8 +2,11 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '../Icon';
 import { useDispatch } from 'react-redux';
-import { addTask } from '../../action/task';
+import { addTaskBacklog } from '../../action/task';
 import { Input } from '../Input';
+import { getUnicId } from '../../helpers/getUnicId';
+import { Button } from '../Button';
+import { TypesButton } from '../../constants/TypesButton';
 
 const StyledBlockTasks = styled.div`
   display: flex;
@@ -93,18 +96,29 @@ const StyledAddButton = styled.button`
 
 const StyledNameButton = styled.span`
   padding-left: 4px;
-  
-  color: #5E6C84;
 `;
 
 export const BlockTasks = ({ blockName, tasks }) => {
   const dispatch = useDispatch();
-  const [isInput, setIsInput] = useState(false);
+  const [isShowInput, setIsShowInput] = useState(false);
+  const isSubmit = isShowInput;
+  const [value, setValue] = useState('');
+  const id = getUnicId([]);
 
-  const handleClick = useCallback(() => {
-    setIsInput(!isInput);
-    dispatch(addTask({ id: 1, title: 'REDUX TASK' }));
-  }, [dispatch, isInput]);
+  const handleClickAdd = useCallback(() => {
+    setIsShowInput(!isShowInput);
+  }, [isShowInput]);
+
+  const handleClickSubmit = useCallback(() => {
+    dispatch(addTaskBacklog({ id, title: value }));
+
+    setIsShowInput(!isShowInput);
+  }, [dispatch, id, isShowInput, value]);
+
+  const handleChange = useCallback(({ target }) => {
+    const { value } = target;
+    setValue(value)
+  }, [])
 
   return (
     <StyledBlockTasks>
@@ -112,11 +126,14 @@ export const BlockTasks = ({ blockName, tasks }) => {
       <StyledTasks>
         {tasks.map(({ id, title }) => <StyledTask key={id}>{title}</StyledTask>)}
       </StyledTasks>
-      {isInput && <Input />}
-      <StyledAddButton onClick={handleClick}>
+      {isShowInput && <Input onChange={handleChange} value={value} />}
+      {!isSubmit && <Button onClick={handleClickAdd} color={TypesButton.OUTLINE}>
         <Icon type="plus" fill="#5E6C84" />
         <StyledNameButton>Add card</StyledNameButton>
-      </StyledAddButton>
+      </Button>}
+      {isSubmit && <Button onClick={handleClickSubmit} color={TypesButton.PRIMARY}>
+        Submit
+      </Button>}
     </StyledBlockTasks>
   );
 };
